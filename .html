@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyHub - Student Productivity Platform</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #3730a3;
+            --secondary: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --dark: #1f2937;
+            --light: #f3f4f6;
+            --gray: #9ca3af;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: #f8fafc;
+            color: var(--dark);
+        }
+
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: 100vh;
+        }
+
+               /* Topbar */
+.topbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #ffff22;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    z-index: 1000; /* Tetap di atas konten */
+}
+
+/* Logo */
+.logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-right: 20px;
+}
+
+/* Navigasi */
+.nav {
+    flex-grow: 1; /* Membuat nav memanfaatkan sisa ruang */
+}
+
+.nav-menu {
+    list-style: none;
+    display: flex;
+    gap: 5px;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-item {
+    margin: 0;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: var(--light);
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+    background: var(--primary);
+    color: white;
+}
+
+.nav-link.active {
+    background: var(--primary);
+    color: white;
+}
+
+/* Search Bar */
+.search-bar {
+    position: relative;
+    width: 300px;
+    margin-left: 20px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 0.5rem 1.5rem;
+    border: 5px solid #e5e7eb;
+    border-radius: 0.5rem;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.search-input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+/* User Menu */
+.user-menu {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* Notifications */
+.notifications {
+    font-size: 1.25rem;
+    cursor: pointer;
+}
+
+
+        /* Main Content Styles */
+        .main-content {
+            margin-left: 250px;
+            padding: 2rem;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .search-bar {
+            position: relative;
+            width: 300px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        /* Task List Styles */
+        .task-list {
+            list-style: none;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+            transition: background 0.3s ease;
+        }
+
+        .task-item:hover {
+            background: var(--light);
+        }
+
+        .task-checkbox {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            border: 2px solid var(--gray);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .task-checkbox.checked {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .task-content {
+            flex: 1;
+        }
+
+        .task-title {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .task-meta {
+            font-size: 0.875rem;
+            color: var(--gray);
+        }
+
+        /* Calendar Styles */
+        .calendar-widget {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.5rem;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .calendar-day:hover {
+            background: var(--light);
+        }
+
+        .calendar-day.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .calendar-day.has-event::after {
+            content: '';
+            position: absolute;
+            bottom: 4px;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--primary);
+        }
+
+        /* Progress Tracker */
+        .progress-container {
+            margin-bottom: 1rem;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--light);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .search-bar {
+                width: 100%;
+            }
+        }
+        
+        /*upload content*/
+        .file-upload-container {
+    margin: 15px 0;
+}
+
+.file-upload-area {
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    transition: all 0.3s ease;
+    background: #f9f9f9;
+}
+
+.file-upload-area:hover {
+    border-color: #666;
+    background: #f0f0f0;
+}
+
+.file-input {
+    display: none;
+}
+
+.file-label {
+    cursor: pointer;
+    display: block;
+}
+
+.file-label i {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: #666;
+}
+
+.file-list {
+    margin-top: 15px;
+}
+
+.file-item {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    margin-bottom: 5px;
+}
+
+.file-item .file-name {
+    flex-grow: 1;
+    margin-right: 10px;
+}
+
+.file-item .file-size {
+    color: #666;
+    margin-right: 10px;
+}
+
+.file-item .remove-file {
+    background: none;
+    border: none;
+    color: #ff4444;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.upload-progress {
+    height: 4px;
+    background: #eee;
+    border-radius: 2px;
+    margin-top: 5px;
+}
+
+.upload-progress-bar {
+    height: 100%;
+    background: #4CAF50;
+    border-radius: 2px;
+    width: 0%;
+    transition: width 0.3s ease;
+}
+        
+    </style>
+</head>
+<body>
+   <main class="main-content">
+    <header class="topbar">
+        <div class="logo">
+            📚 StudyHub
+        </div>
+<div class="search-bar">
+            <input type="text" class="search-input" placeholder="Search...">
+        </div>
+        <nav class="nav">
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="#" class="nav-link active">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">Assignments</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">Schedule</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">Grades</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">Study Materials</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">Class Updates</a>
+                </li>
+            </ul>
+        </nav>
+        
+        <div class="user-menu">
+            <div class="notifications">🔔</div>
+            <div class="user-avatar">JS</div>
+        </div>
+    </header>
+</main>
+
+
+
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h2 class="card-title">Upcoming Assignments</h2>
+                    </div>
+                    <ul class="task-list" id="assignmentsList">
+                        <!-- Assignments will be populated by JavaScript -->
+                    </ul>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h2 class="card-title">Today's Schedule</h2>
+                    </div>
+                    <div id="scheduleContent">
+                        <!-- Schedule will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h2 class="card-title">Grade Overview</h2>
+                    </div>
+                    <div id="gradesContent">
+                        <!-- Grades will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="file-upload-container">
+            <div class="file-upload-area">
+        <input type="file" id="assignmentFiles" multiple class="file-input" accept=".pdf,.doc,.docx,.txt,.jpg,.png">
+        <label for="assignmentFiles" class="file-label">
+            <i class="fas fa-cloud-upload-alt"></i>
+             <span>Drop files here or click to upload</span>
+        </label>
+            </div>
+           <div id="fileList" class="file-list"></div>
+        </div>
+
+            <div class="calendar-widget">
+                <div class="calendar-header">
+                    <h2>Calendar</h2>
+                    <div class="calendar-controls">
+                        <button id="prevMonth">←</button>
+                        <span id="currentMonth">September 2023</span>
+                        <button id="nextMonth">→</button>
+                    </div>
+                </div>
+                <div class="calendar-grid" id="calendarGrid">
+                    <!-- Calendar will be populated by JavaScript -->
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script>
+// Data structures
+const appState = {
+    assignments: [1],
+    schedule: [],
+    grades: {},
+    notifications: [],
+    currentUser: {
+        id: "12345",
+        name: "John Smith",
+        grade: "12",
+        classes: []
+    },
+    events: [],
+    currentMonth: new Date(7)
+};
+
+// Utility Functions
+const formatDate = (date) => {
+    return new Intl.DateTimeFormat('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    }).format(date);
+};
+
+const formatTime = (time) => {
+    return new Intl.DateTimeFormat('en-US', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+    }).format(time);
+};
+
+// Assignment Management
+class Assignment {
+    constructor(id, title, description, dueDate, subject, status = 'pending') {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.dueDate = new Date(dueDate);
+        this.subject = subject;
+        this.status = status;
+        this.attachments = [];
+    }
+
+    toggleStatus() {
+        this.status = this.status === 'pending' ? 'completed' : 'pending';
+        return this.status;
+    }
+
+    addAttachment(attachment) {
+        this.attachments.push(attachment);
+    }
+
+    getRemainingDays() {
+        const today = new Date();
+        const diffTime = this.dueDate - today;
+        return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    }
+}
+
+class AssignmentManager {
+    constructor() {
+        this.assignments = [];
+    }
+
+    addAssignment(assignment) {
+        this.assignments.push(assignment);
+        this.sortAssignments();
+        this.saveToLocalStorage();
+        this.renderAssignments();
+    }
+
+    removeAssignment(id) {
+        this.assignments = this.assignments.filter(a => a.id !== id);
+        this.saveToLocalStorage();
+        this.renderAssignments();
+    }
+
+    sortAssignments() {
+        this.assignments.sort((a, b) => a.dueDate - b.dueDate);
+    }
+
+    saveToLocalStorage() {
+        localStorage.setItem('assignments', JSON.stringify(this.assignments));
+    }
+
+    loadFromLocalStorage() {
+        const saved = localStorage.getItem('assignments');
+        if (saved) {
+            this.assignments = JSON.parse(saved).map(a => {
+                return new Assignment(a.id, a.title, a.description, a.dueDate, a.subject, a.status);
+            });
+            this.renderAssignments();
+        }
+    }
+
+    renderAssignments() {
+        const list = document.getElementById('assignmentsList');
+        if (!list) return;
+
+        list.innerHTML = '';
+        this.assignments.forEach(assignment => {
+            const li = document.createElement('li');
+            li.className = 'task-item';
+            li.innerHTML = `
+                <div class="task-checkbox ${assignment.status === 'completed' ? 'checked' : ''}" 
+                     onclick="assignmentManager.toggleAssignment('${assignment.id}')"></div>
+                <div class="task-content">
+                    <div class="task-title">${assignment.title}</div>
+                    <div class="task-meta">
+                        ${assignment.subject} • Due: ${formatDate(new Date(assignment.dueDate))}
+                        (${assignment.getRemainingDays()} days left)
+                    </div>
+                </div>
+                <button onclick="assignmentManager.removeAssignment('${assignment.id}')" class="delete-btn">×</button>
+            `;
+            list.appendChild(li);
+        });
+    }
+
+    toggleAssignment(id) {
+        const assignment = this.assignments.find(a => a.id === id);
+        if (assignment) {
+            assignment.toggleStatus();
+            this.saveToLocalStorage();
+            this.renderAssignments();
+        }
+    }
+}
+
+// Schedule Management
+class Schedule {
+    constructor() {
+        this.events = [];
+        this.loadFromLocalStorage();
+    }
+
+    addEvent(event) {
+        this.events.push(event);
+        this.sortEvents();
+        this.saveToLocalStorage();
+        this.renderSchedule();
+    }
+
+    removeEvent(id) {
+        this.events = this.events.filter(e => e.id !== id);
+        this.saveToLocalStorage();
+        this.renderSchedule();
+    }
+
+    sortEvents() {
+        this.events.sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
+    }
+
+    saveToLocalStorage() {
+        localStorage.setItem('schedule', JSON.stringify(this.events));
+    }
+
+    loadFromLocalStorage() {
+        const saved = localStorage.getItem('schedule');
+        if (saved) {
+            this.events = JSON.parse(saved);
+            this.renderSchedule();
+        }
+    }
+
+    renderSchedule() {
+        const container = document.getElementById('scheduleContent');
+        if (!container) return;
+
+        container.innerHTML = '';
+        const today = new Date();
+        const todayEvents = this.events.filter(event => {
+            const eventDate = new Date(event.startTime);
+            return eventDate.toDateString() === today.toDateString();
+        });
+
+        if (todayEvents.length === 0) {
+            container.innerHTML = '<p class="no-events">No events scheduled for today</p>';
+            return;
+        }
+
+        todayEvents.forEach(event => {
+            const eventEl = document.createElement('div');
+            eventEl.className = 'schedule-event';
+            eventEl.innerHTML = `
+                <div class="event-time">${formatTime(new Date(event.startTime))}</div>
+                <div class="event-details">
+                    <div class="event-title">${event.title}</div>
+                    <div class="event-location">${event.location}</div>
+                </div>
+            `;
+            container.appendChild(eventEl);
+        });
+    }
+}
+
+// Grade Tracking
+class GradeTracker {
+    constructor() {
+        this.grades = {};
+        this.loadFromLocalStorage();
+    }
+
+    addGrade(subject, grade, weight = 1) {
+        if (!this.grades[subject]) {
+            this.grades[subject] = {
+                grades: [],
+                weights: []
+            };
+        }
+        this.grades[subject].grades.push(grade);
+        this.grades[subject].weights.push(weight);
+        this.saveToLocalStorage();
+        this.renderGrades();
+    }
+
+    calculateAverage(subject) {
+        if (!this.grades[subject]) return 0;
+        
+        const grades = this.grades[subject].grades;
+        const weights = this.grades[subject].weights;
+        let totalWeight = weights.reduce((a, b) => a + b, 0);
+        let weightedSum = grades.reduce((sum, grade, index) => sum + grade * weights[index], 0);
+        
+        return weightedSum / totalWeight;
+    }
+
+    calculateOverallGPA() {
+        const subjects = Object.keys(this.grades);
+        if (subjects.length === 0) return 0;
+
+        const sum = subjects.reduce((total, subject) => total + this.calculateAverage(subject), 0);
+        return sum / subjects.length;
+    }
+
+    saveToLocalStorage() {
+        localStorage.setItem('grades', JSON.stringify(this.grades));
+    }
+
+    loadFromLocalStorage() {
+        const saved = localStorage.getItem('grades');
+        if (saved) {
+            this.grades = JSON.parse(saved);
+            this.renderGrades();
+        }
+    }
+
+    renderGrades() {
+        const container = document.getElementById('gradesContent');
+        if (!container) return;
+
+        container.innerHTML = '';
+        
+        // Overall GPA
+        const gpaEl = document.createElement('div');
+        gpaEl.className = 'overall-gpa';
+        gpaEl.innerHTML = `
+            <h3>Overall GPA</h3>
+            <div class="gpa-value">${this.calculateOverallGPA().toFixed(2)}</div>
+        `;
+        container.appendChild(gpaEl);
+
+        // Individual Subjects
+        Object.keys(this.grades).forEach(subject => {
+            const subjectEl = document.createElement('div');
+            subjectEl.className = 'subject-grade';
+            const average = this.calculateAverage(subject);
+            subjectEl.innerHTML = `
+                <div class="subject-name">${subject}</div>
+                <div class="grade-value">${average.toFixed(1)}%</div>
+                <div class="grade-bar">
+                    <div class="grade-fill" style="width: ${average}%"></div>
+                </div>
+            `;
+            container.appendChild(subjectEl);
+        });
+    }
+}
+
+// Calendar Management
+class Calendar {
+    constructor() {
+        this.currentDate = new Date();
+        this.selectedDate = new Date();
+        this.events = [];
+        this.initializeCalendar();
+    }
+
+    initializeCalendar() {
+        this.renderCalendar();
+        this.attachEventListeners();
+    }
+
+    renderCalendar() {
+        const grid = document.getElementById('calendarGrid');
+        if (!grid) return;
+
+        const year = this.currentDate.getFullYear();
+        const month = this.currentDate.getMonth();
+
+        document.getElementById('currentMonth').textContent = 
+            new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' }).format(this.currentDate);
+
+        const firstDay = new Date(year, month, 1);
+        const lastDay = new Date(year, month + 1, 0);
+        
+        grid.innerHTML = '';
+
+        // Add day headers
+        const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        days.forEach(day => {
+            const dayHeader = document.createElement('div');
+            dayHeader.className = 'calendar-day-header';
+            dayHeader.textContent = day;
+            grid.appendChild(dayHeader);
+        });
+
+        // Add padding for first day
+        for (let i = 0; i < firstDay.getDay(); i++) {
+            grid.appendChild(document.createElement('div'));
+        }
+
+        // Add days
+        for (let day = 1; day <= lastDay.getDate(); day++) {
+            const dayEl = document.createElement('div');
+            dayEl.className = 'calendar-day';
+            dayEl.textContent = day;
+
+            const currentDate = new Date(year, month, day);
+            if (this.hasEvents(currentDate)) {
+                dayEl.classList.add('has-event');
+            }
+
+            if (this.isSameDate(currentDate, this.selectedDate)) {
+                dayEl.classList.add('active');
+            }
+
+            dayEl.addEventListener('click', () => this.selectDate(new Date(year, month, day)));
+            grid.appendChild(dayEl);
+        }
+    }
+
+    attachEventListeners() {
+        document.getElementById('prevMonth').addEventListener('click', () => {
+            this.currentDate.setMonth(this.currentDate.getMonth() - 1);
+            this.renderCalendar();
+        });
+
+        document.getElementById('nextMonth').addEventListener('click', () => {
+            this.currentDate.setMonth(this.currentDate.getMonth() + 1);
+            this.renderCalendar();
+        });
+    }
+
+    hasEvents(date) {
+        return this.events.some(event => this.isSameDate(new Date(event.date), date));
+    }
+
+    isSameDate(date1, date2) {
+        return date1.getFullYear() === date2.getFullYear() &&
+               date1.getMonth() === date2.getMonth() &&
+               date1.getDate() === date2.getDate();
+    }
+
+    selectDate(date) {
+        this.selectedDate = date;
+        this.renderCalendar();
+        this.showEventsForDate(date);
+    }
+
+    showEventsForDate(date) {
+        // Implement event display logic
+        const events = this.events.filter(event => this.isSameDate(new Date(event.date), date));
+        // Update UI to show events
+    }
+}
+
+// Notification System
+class NotificationSystem {
+    constructor() {
+        this.notifications = [];
+        this.initializeNotifications();
+    }
+
+    initializeNotifications() {
+        this.createNotificationContainer();
+        this.loadNotifications();
+    }
+
+    createNotificationContainer() {
+        const container = document.createElement('div');
+        container.id = 'notificationContainer';
+        container.className = 'notification-container';
+        document.body.appendChild(container);
+    }
+
+    addNotification(title, message, type = 'info') {
+        const notification = {
+            id: Date.now(),
+            title,
+            message,
+            type,
+            timestamp: new Date()
+        };
+
+        this.notifications.push(notification);
+        this.showNotification(notification);
+        this.saveNotifications();
+    }
+
+    showNotification(notification) {
+        const element = document.createElement('div');
+        element.className = `notification ${notification.type}`;
+        element.innerHTML = `
+            <h4>${notification.title}</h4>
+            <p>${notification.message}</p>
+        `;
+
+        const container = document.getElementById('notificationContainer');
+        container.appendChild(element);
+
+        setTimeout(() => {
+            element.remove();
+        }, 5000);
+    }
+
+    saveNotifications() {
+        localStorage.setItem('notifications', JSON.stringify(this.notifications));
+    }
+
+    loadNotifications() {
+        const saved = localStorage.getItem('notifications');
+        if (saved) {
+            this.notifications = JSON.parse(saved);
+        }
+    }
+}
+
+// Initialize all managers
+const assignmentManager = new AssignmentManager();
+const schedule = new Schedule();
+const gradeTracker = new GradeTracker();
+const calendar = new Calendar();
+const notificationSystem = new NotificationSystem();
+
+// Load initial data
+document.addEventListener('DOMContentLoaded', () => {
+    assignmentManager.loadFromLocalStorage();
+    schedule.loadFromLocalStorage();
+    gradeTracker.loadFromLocalStorage();
+
+    // Add some sample data
+    if (assignmentManager.assignments.length === 0) {
+        assignmentManager.addAssignment(new Assignment(
+            '1',
+            'Math Homework',
+            'Complete exercises 1-10',
+            new Date(Date.now() + 86400000),
+            'Mathematics'
+        ));
+    }
+
+    // Initialize search functionality
+    const searchInput = document.querySelector('.search-input');
+    searchInput.addEventListener('input', (e) => {
+        const searchTerm = e.target.value.toLowerCase();
+        // Implement search logic across assignments, schedule, etc.
+    });
+});
+</script>
+</body>
+</html>
